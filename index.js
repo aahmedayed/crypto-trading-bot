@@ -2,7 +2,7 @@ require('dotenv').config();
 var StockIndicator = require("stock-technical-indicators").Indicator
 const { Supertrend } = require("stock-technical-indicators/study/Supertrend")
 const binance = require('ccxt').binance;
-let inPosition = false;
+let inPosition = true;
 
 const binanceClient = new binance({
     'apiKey': process.env.API_KEY,
@@ -32,7 +32,7 @@ const run = () => {
         base: 'USDT',
         allocation: 0.1,
         spread: 0.1,
-        tickInterval: 30000
+        tickInterval: 1000
     }
 
     tick(config);
