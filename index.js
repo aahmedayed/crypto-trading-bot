@@ -32,7 +32,7 @@ const run = () => {
         base: 'USDT',
         allocation: 0.1,
         spread: 0.1,
-        tickInterval: 1000
+        tickInterval: 60000
     }
 
     tick(config);
