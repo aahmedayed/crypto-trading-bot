@@ -27,16 +27,10 @@ const tick = async (config) => {
 }
 
 const run = () => {
-    const config = {
-        asset: 'BTC',
-        base: 'USDT',
-        allocation: 0.1,
-        spread: 0.1,
-        tickInterval: 60000
-    }
+    const config = configBinance;
 
-    tick(config);
-    setInterval(tick, config.tickInterval, config, binanceClient);
+    // tick(config);
+    // setInterval(tick, config.tickInterval, config, binanceClient);
 }
 
 const checkBuySellSignals = async (atrs, binanceClient) => {
