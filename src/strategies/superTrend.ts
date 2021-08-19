@@ -23,8 +23,6 @@ export class SuperTrendStrategy implements CryptoStrategy {
 
     }
     private async checkBuySellSignals(atrs: any) {
-        const freeBalance = (await this.exchange.fetchBalance()).free['USDT'];
-        console.log(`Free Balance is: ${freeBalance} USDT`);
         const currentRowIndex = atrs.length - 1;
         const previousRowIndex = currentRowIndex - 1;
         const currentSuperTrendDirection = atrs[currentRowIndex].Supertrend.Direction;
@@ -32,31 +30,51 @@ export class SuperTrendStrategy implements CryptoStrategy {
         console.log(`current Super Trend Direction for ${this.cryptoCurrency.symbol}`, currentSuperTrendDirection);
         console.log(`previous Super Trend Direction for ${this.cryptoCurrency.symbol}`, previousSuperTrendDirection);
 
-        const params = {
-            quoteOrderQty: freeBalance > 500 ? freeBalance / 2 : freeBalance,
-        }
 
         if (currentSuperTrendDirection === 1 && previousSuperTrendDirection === -1) {
+            const freeBalance = (await this.exchange.fetchBalance()).free['USDT'];
+            console.log(`Free Balance is: ${freeBalance} USDT`);
             if (!this.cryptoCurrency.inPosition && freeBalance > 50) {
-                this.cryptoCurrency.inPosition = true;
-                const order = await this.exchange
-                    .createOrder(this.cryptoCurrency.symbol, 'market', 'buy', undefined, undefined, params);
-                console.log('order Bought :');
-                console.log(order);
+                try {
+                    const params = {
+                        quoteOrderQty: freeBalance >= 500 ? freeBalance / 2 : freeBalance,
+                    }
+                    const order = await this.exchange
+                        .createOrder(this.cryptoCurrency.symbol, 'market', 'buy', undefined, undefined, params);
+                    console.log('order Bought :');
+                    console.log(order);
+                    this.cryptoCurrency.inPosition = true;
+                }
+                catch {
+                    this.cryptoCurrency.inPosition = false;
+                }
+
             }
             else {
-                console.log(params);
+                console.log('Insufficient Balance (< 50 USDT ) or you are already in position');
             }
 
         }
 
         if (currentSuperTrendDirection === -1 && previousSuperTrendDirection === 1) {
             if (this.cryptoCurrency.inPosition) {
-                this.cryptoCurrency.inPosition = false;
-                const order = await this.exchange
-                    .createOrder(this.cryptoCurrency.symbol, 'market', 'sell', undefined, undefined, params);
-                console.log('order Sold');
-                console.log(order);
+
+                try {
+                    const openOrders = await this.exchange.fetchOrders(this.cryptoCurrency.symbol);
+                    const amount = openOrders[openOrders.length - 1].amount;
+                    console.log(`The amount available for ${this.cryptoCurrency.symbol} is ${amount}`);
+                    const amountWithFee = amount - (0.01 * amount);
+
+                    const order = await this.exchange
+                        .createOrder(this.cryptoCurrency.symbol, 'market', 'sell', amountWithFee);
+                    console.log('order Sold');
+                    console.log(order);
+                    this.cryptoCurrency.inPosition = false;
+                }
+                catch {
+                    this.cryptoCurrency.inPosition = true;
+                }
+
             } else {
                 console.log('there is no order to sell');
             }

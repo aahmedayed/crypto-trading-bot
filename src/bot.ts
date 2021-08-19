@@ -14,6 +14,9 @@ const binanceClient = new binance({
         'createMarketBuyOrderRequiresPrice': false, // switch off
         'adjustForTimeDifference': true
     },
+    'has': {
+        fetchOpenOrders: true,
+    }
 });
 
 const adausdt: CryptoCurrency = {
