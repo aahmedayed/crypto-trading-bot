@@ -42,7 +42,5 @@ const adaSuperTrendStrategy = new SuperTrendStrategy(binanceClient, adausdt);
 const dogeSuperTrendStrategy = new SuperTrendStrategy(binanceClient, dogeusdt);
 const xrpSuperTrendStrategy = new SuperTrendStrategy(binanceClient, xrpusdt);
 
-console.log('API_KEY = ',process.env.API_KEY);
-console.log('API_SECRET = ',process.env.API_SECRET);
 const bot = new Bot([adaSuperTrendStrategy, dogeSuperTrendStrategy, xrpSuperTrendStrategy]);
 bot.run();
