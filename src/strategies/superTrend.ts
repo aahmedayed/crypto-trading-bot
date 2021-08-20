@@ -33,7 +33,7 @@ export class SuperTrendStrategy implements CryptoStrategy {
             param = this.param;
         }
         const atrs = newStudyATR.calculate(ohlcv, param);
-        this.checkBuySellSignals(atrs);
+        await this.checkBuySellSignals(atrs);
 
     }
     private async checkBuySellSignals(atrs: any) {
