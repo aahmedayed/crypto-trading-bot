@@ -4,12 +4,21 @@ import { Supertrend } from "stock-technical-indicators/study/Supertrend";
 import { CryptoCurrency } from "../interfaces/cryptoCurrency.interface";
 import { CryptoStrategy } from "../interfaces/cryptoStrategy.interface";
 
+
+export interface ISuperTrendParam {
+    multiplier: number;
+    period: number;
+}
 export class SuperTrendStrategy implements CryptoStrategy {
     exchange: Exchange;
     cryptoCurrency: CryptoCurrency;
-    constructor(exchange: Exchange, cryptoCurrency: CryptoCurrency) {
+    param: ISuperTrendParam;
+    constructor(exchange: Exchange, cryptoCurrency: CryptoCurrency, param?: ISuperTrendParam) {
         this.exchange = exchange;
         this.cryptoCurrency = cryptoCurrency;
+        if (param){
+            this.param = param;
+        }
     }
     async onStrategyRun(): Promise<void> {
 
@@ -19,7 +28,11 @@ export class SuperTrendStrategy implements CryptoStrategy {
 
         ohlcv.pop();
         const newStudyATR = new Indicator(new Supertrend());
-        const atrs = newStudyATR.calculate(ohlcv, { period: 7, multiplier: 3 });
+        let param: ISuperTrendParam = { period: 7, multiplier: 3 };
+        if(this.param){
+            param = this.param;
+        }
+        const atrs = newStudyATR.calculate(ohlcv, param);
         this.checkBuySellSignals(atrs);
 
     }

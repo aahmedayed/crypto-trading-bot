@@ -39,8 +39,8 @@ const xrpusdt: CryptoCurrency = {
 }
 
 const adaSuperTrendStrategy = new SuperTrendStrategy(binanceClient, adausdt);
-const dogeSuperTrendStrategy = new SuperTrendStrategy(binanceClient, dogeusdt);
-const xrpSuperTrendStrategy = new SuperTrendStrategy(binanceClient, xrpusdt);
+const dogeSuperTrendStrategy = new SuperTrendStrategy(binanceClient, dogeusdt, { period: 7, multiplier: 4 });
+const xrpSuperTrendStrategy = new SuperTrendStrategy(binanceClient, xrpusdt, { period: 7, multiplier: 4 });
 
 const bot = new Bot([adaSuperTrendStrategy, dogeSuperTrendStrategy, xrpSuperTrendStrategy]);
 bot.run();
