@@ -17,9 +17,10 @@ export class Bot<T extends CryptoStrategy> {
         setInterval(() => this.runStratigies(), configBot.tickInterval);
     }
 
-    private runStratigies() {
-        this.favoritesCryptoStrategy.forEach(cryptoStrategy => {
-            cryptoStrategy.onStrategyRun();
-        });
+    private async runStratigies() {
+        await this.favoritesCryptoStrategy.reduce(async (promise, cryptoStrategy) => {
+            await promise;
+            await cryptoStrategy.onStrategyRun();
+          }, Promise.resolve());
     }
 }
