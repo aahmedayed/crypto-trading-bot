@@ -17,6 +17,7 @@ export class SuperTrendStrategy implements CryptoStrategy {
             .fetchOHLCV(this.cryptoCurrency.symbol, this.cryptoCurrency.timeFrame,
                 this.cryptoCurrency.since, this.cryptoCurrency.limit);
 
+        ohlcv.pop();
         const newStudyATR = new Indicator(new Supertrend());
         const atrs = newStudyATR.calculate(ohlcv, { period: 7, multiplier: 3 });
         this.checkBuySellSignals(atrs);
