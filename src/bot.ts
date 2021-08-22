@@ -28,7 +28,7 @@ const adausdt: CryptoCurrency = {
 const dogeusdt: CryptoCurrency = {
     symbol: 'DOGE/USDT',
     timeFrame: '1h',
-    inPosition: false,
+    inPosition: true,
     limit: 100
 }
 const xrpusdt: CryptoCurrency = {
