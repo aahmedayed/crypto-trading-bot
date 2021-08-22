@@ -28,7 +28,7 @@ const adausdt: CryptoCurrency = {
 const dogeusdt: CryptoCurrency = {
     symbol: 'DOGE/USDT',
     timeFrame: '1h',
-    inPosition: true,
+    inPosition: false,
     limit: 100
 }
 const xrpusdt: CryptoCurrency = {
@@ -39,8 +39,8 @@ const xrpusdt: CryptoCurrency = {
 }
 
 const adaSuperTrendStrategy = new SuperTrendStrategy(binanceClient, adausdt);
-const dogeSuperTrendStrategy = new SuperTrendStrategy(binanceClient, dogeusdt, { period: 7, multiplier: 4 });
-const xrpSuperTrendStrategy = new SuperTrendStrategy(binanceClient, xrpusdt, { period: 7, multiplier: 4 });
+const dogeSuperTrendStrategy = new SuperTrendStrategy(binanceClient, dogeusdt);
+const xrpSuperTrendStrategy = new SuperTrendStrategy(binanceClient, xrpusdt);
 
 const bot = new Bot([adaSuperTrendStrategy, dogeSuperTrendStrategy, xrpSuperTrendStrategy]);
 bot.run();
