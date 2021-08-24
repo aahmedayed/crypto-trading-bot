@@ -22,7 +22,7 @@ const binanceClient = new binance({
 const adausdt: CryptoCurrency = {
     symbol: 'ADA/USDT',
     timeFrame: '1h',
-    inPosition: true,
+    inPosition: false,
     limit: 100
 }
 const dogeusdt: CryptoCurrency = {
