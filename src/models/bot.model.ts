@@ -1,26 +1,29 @@
 import { CryptoStrategy } from "../interfaces/cryptoStrategy.interface";
 
 const configBot = {
-    allocation: 0.1,
-    spread: 0.1,
-    tickInterval: 5000
-}
+  allocation: 0.1,
+  spread: 0.1,
+  tickInterval: 10000,
+};
 export class Bot<T extends CryptoStrategy> {
-    private favoritesCryptoStrategy: T[];
+  private favoritesCryptoStrategy: T[];
 
-    constructor(favoritesCryptoStrategy: T[]) {
-        this.favoritesCryptoStrategy = favoritesCryptoStrategy;
+  constructor(favoritesCryptoStrategy: T[]) {
+    this.favoritesCryptoStrategy = favoritesCryptoStrategy;
+  }
 
-    }
+  public run() {
+    console.log("the bot is running");
+    setInterval(() => this.runStratigies(), configBot.tickInterval);
+  }
 
-    public run() {
-        setInterval(() => this.runStratigies(), configBot.tickInterval);
-    }
-
-    private async runStratigies() {
-        await this.favoritesCryptoStrategy.reduce(async (promise, cryptoStrategy) => {
-            await promise;
-            await cryptoStrategy.onStrategyRun();
-          }, Promise.resolve());
-    }
+  private async runStratigies() {
+    await this.favoritesCryptoStrategy.reduce(
+      async (promise, cryptoStrategy) => {
+        await promise;
+        await cryptoStrategy.onStrategyRun();
+      },
+      Promise.resolve()
+    );
+  }
 }

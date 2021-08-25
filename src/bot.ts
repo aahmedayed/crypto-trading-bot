@@ -1,46 +1,56 @@
 import * as dotenv from "dotenv";
 import { binance } from "ccxt";
 import { SuperTrendStrategy } from "./strategies/superTrend";
-import { CryptoCurrency } from "./interfaces/cryptoCurrency.interface";
 import { Bot } from "./models/bot.model";
+import { MarketFrame } from "./models/market-frame.model";
 dotenv.config();
 
-
 const binanceClient = new binance({
-    'apiKey': process.env.API_KEY,
-    'secret': process.env.API_SECRET,
-    'enableRateLimit': true,
-    'options': {
-        'createMarketBuyOrderRequiresPrice': false, // switch off
-        'adjustForTimeDifference': true
-    },
-    'has': {
-        fetchOpenOrders: true,
-    }
+  apiKey: process.env.API_KEY,
+  secret: process.env.API_SECRET,
+  enableRateLimit: true,
+  options: {
+    createMarketBuyOrderRequiresPrice: false,
+    adjustForTimeDifference: true,
+  },
+  has: {
+    fetchOpenOrders: true,
+  },
 });
 
-const adausdt: CryptoCurrency = {
-    symbol: 'ADA/USDT',
-    timeFrame: '1h',
-    inPosition: false,
-    limit: 100
-}
-const dogeusdt: CryptoCurrency = {
-    symbol: 'DOGE/USDT',
-    timeFrame: '1h',
-    inPosition: false,
-    limit: 100
-}
-const xrpusdt: CryptoCurrency = {
-    symbol: 'XRP/USDT',
-    timeFrame: '1h',
-    inPosition: false,
-    limit: 100
-}
+binanceClient
+  .loadMarkets()
+  .then(() => {
+    const adausdt: MarketFrame = new MarketFrame(
+      binanceClient.market("ADA/USDT")
+    );
+    const xrpusdt: MarketFrame = new MarketFrame(
+      binanceClient.market("XRP/USDT")
+    );
+    const lunausdt: MarketFrame = new MarketFrame(
+      binanceClient.market("LUNA/USDT")
+    );
 
-const adaSuperTrendStrategy = new SuperTrendStrategy(binanceClient, adausdt);
-const dogeSuperTrendStrategy = new SuperTrendStrategy(binanceClient, dogeusdt);
-const xrpSuperTrendStrategy = new SuperTrendStrategy(binanceClient, xrpusdt);
+    const adaSuperTrendStrategy1H = new SuperTrendStrategy(
+      binanceClient,
+      adausdt
+    );
+    const lunaSuperTrendStrategy1H = new SuperTrendStrategy(
+      binanceClient,
+      lunausdt
+    );
+    const xrpSuperTrendStrategy1H = new SuperTrendStrategy(
+      binanceClient,
+      xrpusdt
+    );
 
-const bot = new Bot([adaSuperTrendStrategy, dogeSuperTrendStrategy, xrpSuperTrendStrategy]);
-bot.run();
+    const bot = new Bot([
+      adaSuperTrendStrategy1H,
+      lunaSuperTrendStrategy1H,
+      xrpSuperTrendStrategy1H,
+    ]);
+    bot.run();
+  })
+  .catch((err) => {
+    console.log(err);
+  });

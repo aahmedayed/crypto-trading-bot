@@ -1,8 +1,7 @@
 import { Exchange } from "ccxt";
-import { CryptoCurrency } from "./cryptoCurrency.interface";
-
+import { MarketFrame } from "../models/market-frame.model";
 export interface CryptoStrategy {
-    exchange: Exchange;
-    cryptoCurrency: CryptoCurrency;
-    onStrategyRun(): Promise<void>;
+  exchange: Exchange;
+  cryptoCurrency: MarketFrame;
+  onStrategyRun(): Promise<void>;
 }
