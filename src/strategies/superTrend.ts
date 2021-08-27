@@ -64,8 +64,9 @@ export class SuperTrendStrategy implements CryptoStrategy {
           !this.cryptoCurrency.frameOptions.inPosition &&
           freeBalance >= 250
         ) {
+          const quoteOrderQty = freeBalance > 600 ? 600 : freeBalance;
           const params = {
-            quoteOrderQty: freeBalance >= 500 ? freeBalance / 2 : freeBalance,
+            quoteOrderQty,
           };
           const order = await this.exchange.createOrder(
             this.cryptoCurrency.market.symbol,
@@ -78,10 +79,6 @@ export class SuperTrendStrategy implements CryptoStrategy {
           console.log("order Bought :");
           console.log(order);
           this.cryptoCurrency.frameOptions.inPosition = true;
-        } else {
-          console.log(
-            "Insufficient Balance (< 50 USDT ) or you are already in position"
-          );
         }
       } catch (error) {
         console.log(error.message);
@@ -101,7 +98,8 @@ export class SuperTrendStrategy implements CryptoStrategy {
           console.log(
             `The amount available for ${this.cryptoCurrency.market.symbol} is ${freeBalance}`
           );
-          const amountWithFee = freeBalance - (this.cryptoCurrency.market.taker * freeBalance);
+          const amountWithFee =
+            freeBalance - this.cryptoCurrency.market.taker * freeBalance;
 
           const order = await this.exchange.createOrder(
             this.cryptoCurrency.market.symbol,
@@ -116,8 +114,6 @@ export class SuperTrendStrategy implements CryptoStrategy {
           console.log(error.message);
           this.cryptoCurrency.frameOptions.inPosition = true;
         }
-      } else {
-        console.log("there is no order to sell");
       }
     }
   }

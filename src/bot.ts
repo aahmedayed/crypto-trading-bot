@@ -28,7 +28,8 @@ binanceClient
       binanceClient.market("XRP/USDT")
     );
     const lunausdt: MarketFrame = new MarketFrame(
-      binanceClient.market("LUNA/USDT")
+      binanceClient.market("LUNA/USDT"),
+      { inPosition: true }
     );
 
     const adaSuperTrendStrategy1H = new SuperTrendStrategy(
