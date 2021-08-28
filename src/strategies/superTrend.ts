@@ -59,7 +59,6 @@ export class SuperTrendStrategy implements CryptoStrategy {
     ) {
       try {
         const freeBalance = (await this.exchange.fetchFreeBalance())["USDT"];
-        console.log(`Free Balance is: ${freeBalance} USDT`);
         if (
           !this.cryptoCurrency.frameOptions.inPosition &&
           freeBalance >= 250
@@ -68,6 +67,7 @@ export class SuperTrendStrategy implements CryptoStrategy {
           const params = {
             quoteOrderQty,
           };
+          console.log(`Free Balance is: ${freeBalance} USDT`);
           const order = await this.exchange.createOrder(
             this.cryptoCurrency.market.symbol,
             "market",
