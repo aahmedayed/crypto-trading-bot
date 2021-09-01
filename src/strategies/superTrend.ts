@@ -11,7 +11,7 @@ export interface ISuperTrendParam {
 export class SuperTrendStrategy implements CryptoStrategy {
   exchange: Exchange;
   cryptoCurrency: MarketFrame;
-  param: ISuperTrendParam;
+  param: ISuperTrendParam = { period: 10, multiplier: 4 };
   constructor(
     exchange: Exchange,
     cryptoCurrency: MarketFrame,
@@ -34,11 +34,7 @@ export class SuperTrendStrategy implements CryptoStrategy {
 
       ohlcv.pop();
       const newStudyATR = new Indicator(new Supertrend());
-      let param: ISuperTrendParam = { period: 7, multiplier: 3 };
-      if (this.param) {
-        param = this.param;
-      }
-      const atrs = newStudyATR.calculate(ohlcv, param);
+      const atrs = newStudyATR.calculate(ohlcv, this.param);
       await this.checkBuySellSignals(atrs);
     } catch (error) {
       console.log(error);

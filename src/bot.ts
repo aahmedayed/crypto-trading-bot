@@ -30,12 +30,13 @@ binanceClient
       { inPosition: true }
     );
     const lunausdt: MarketFrame = new MarketFrame(
-      binanceClient.market("LUNA/USDT"),
+      binanceClient.market("LUNA/USDT")
     );
 
     const adaSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
-      adausdt
+      adausdt,
+      { period: 7, multiplier: 3 }
     );
     const lunaSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
