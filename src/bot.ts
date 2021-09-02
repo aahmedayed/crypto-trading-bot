@@ -22,12 +22,10 @@ binanceClient
   .loadMarkets()
   .then(() => {
     const adausdt: MarketFrame = new MarketFrame(
-      binanceClient.market("ADA/USDT"),
-      { inPosition: true }
+      binanceClient.market("ADA/USDT")
     );
     const xrpusdt: MarketFrame = new MarketFrame(
-      binanceClient.market("XRP/USDT"),
-      { inPosition: true }
+      binanceClient.market("XRP/USDT")
     );
     const lunausdt: MarketFrame = new MarketFrame(
       binanceClient.market("LUNA/USDT")

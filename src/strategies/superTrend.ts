@@ -1,4 +1,4 @@
-import { Exchange } from "ccxt";
+import { Exchange, OHLCV } from "ccxt";
 import { Indicator } from "stock-technical-indicators";
 import { Supertrend } from "stock-technical-indicators/study/Supertrend";
 import { CryptoStrategy } from "../interfaces/cryptoStrategy.interface";
@@ -32,15 +32,15 @@ export class SuperTrendStrategy implements CryptoStrategy {
         this.cryptoCurrency.frameOptions.limit
       );
 
-      ohlcv.pop();
+      const lastOHLCV = ohlcv.pop();
       const newStudyATR = new Indicator(new Supertrend());
       const atrs = newStudyATR.calculate(ohlcv, this.param);
-      await this.checkBuySellSignals(atrs);
+      await this.checkBuySellSignals(atrs, lastOHLCV);
     } catch (error) {
       console.log(error);
     }
   }
-  private async checkBuySellSignals(atrs: any) {
+  private async checkBuySellSignals(atrs: any, ohlcv: OHLCV) {
     const currentRowIndex = atrs.length - 1;
     const previousRowIndex = currentRowIndex - 1;
 
@@ -86,17 +86,21 @@ export class SuperTrendStrategy implements CryptoStrategy {
       currentSuperTrendDirection === -1 &&
       previousSuperTrendDirection === 1
     ) {
-      if (this.cryptoCurrency.frameOptions.inPosition) {
-        try {
-          const freeBalance = (await this.exchange.fetchFreeBalance())[
-            this.cryptoCurrency.market.base
-          ];
+      try {
+        const freeBalance = (await this.exchange.fetchFreeBalance())[
+          this.cryptoCurrency.market.base
+        ];
+        const amountWithFee =
+          freeBalance - this.cryptoCurrency.market.taker * freeBalance;
+        const price = amountWithFee * ohlcv[4];
+        const minNational = this.cryptoCurrency.market.limits.cost?.min || 10;
+        if (
+          this.cryptoCurrency.frameOptions.inPosition ||
+          price > minNational
+        ) {
           console.log(
             `The amount available for ${this.cryptoCurrency.market.symbol} is ${freeBalance}`
           );
-          const amountWithFee =
-            freeBalance - this.cryptoCurrency.market.taker * freeBalance;
-
           const order = await this.exchange.createOrder(
             this.cryptoCurrency.market.symbol,
             "market",
@@ -106,10 +110,10 @@ export class SuperTrendStrategy implements CryptoStrategy {
           console.log("order Sold");
           console.log(order);
           this.cryptoCurrency.frameOptions.inPosition = false;
-        } catch (error) {
-          console.log(error.message);
-          this.cryptoCurrency.frameOptions.inPosition = true;
         }
+      } catch (error) {
+        console.log(error.message);
+        this.cryptoCurrency.frameOptions.inPosition = true;
       }
     }
   }
