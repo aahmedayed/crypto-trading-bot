@@ -35,8 +35,7 @@ binanceClient
 
     const adaSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
-      adausdt,
-      { period: 7, multiplier: 3 }
+      adausdt
     );
     const lunaSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
