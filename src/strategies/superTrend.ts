@@ -55,10 +55,15 @@ export class SuperTrendStrategy implements CryptoStrategy {
     ) {
       try {
         const freeBalance = (await this.exchange.fetchFreeBalance())["USDT"];
-        if (
-          !this.cryptoCurrency.frameOptions.inPosition &&
-          freeBalance >= 250
-        ) {
+        const freeCryotoBalance = (await this.exchange.fetchFreeBalance())[
+          this.cryptoCurrency.market.base
+        ];
+        const amountWithFee =
+          freeCryotoBalance -
+          this.cryptoCurrency.market.taker * freeCryotoBalance;
+        const freeCryotoBalancePrice = amountWithFee * ohlcv[4];
+        const minNational = this.cryptoCurrency.market.limits.cost?.min || 10;
+        if (freeCryotoBalancePrice <= minNational && freeBalance >= 250) {
           const quoteOrderQty = freeBalance > 600 ? 600 : freeBalance;
           const params = {
             quoteOrderQty,
@@ -95,7 +100,6 @@ export class SuperTrendStrategy implements CryptoStrategy {
         const price = amountWithFee * ohlcv[4];
         const minNational = this.cryptoCurrency.market.limits.cost?.min || 10;
         if (
-          this.cryptoCurrency.frameOptions.inPosition ||
           price > minNational
         ) {
           console.log(
