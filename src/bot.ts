@@ -41,7 +41,8 @@ binanceClient
     );
     const xrpSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
-      xrpusdt
+      xrpusdt,
+      { period: 7, multiplier: 3 }
     );
 
     const bot = new Bot([
