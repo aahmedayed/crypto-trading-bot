@@ -27,17 +27,17 @@ binanceClient
     const xrpusdt: MarketFrame = new MarketFrame(
       binanceClient.market("XRP/USDT")
     );
-    const lunausdt: MarketFrame = new MarketFrame(
-      binanceClient.market("LUNA/USDT")
+    const solusdt: MarketFrame = new MarketFrame(
+      binanceClient.market("SOL/USDT")
     );
 
     const adaSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
       adausdt
     );
-    const lunaSuperTrendStrategy1H = new SuperTrendStrategy(
+    const solSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
-      lunausdt
+      solusdt
     );
     const xrpSuperTrendStrategy1H = new SuperTrendStrategy(
       binanceClient,
@@ -47,7 +47,7 @@ binanceClient
 
     const bot = new Bot([
       adaSuperTrendStrategy1H,
-      lunaSuperTrendStrategy1H,
+      solSuperTrendStrategy1H,
       xrpSuperTrendStrategy1H,
     ]);
     bot.run();
