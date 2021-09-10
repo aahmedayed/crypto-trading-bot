@@ -12,7 +12,7 @@ export class MarketFrame {
   frameOptions: IFrameOptions = {
     inPosition: false,
     timeFrame: "1h",
-    limit: 100,
+    limit: 500,
   };
 
   constructor(market: Market, frameOptions?: IFrameOptions) {
