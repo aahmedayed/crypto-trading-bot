@@ -111,7 +111,7 @@ export class RsiStrategy implements CryptoStrategy {
           ];
           const amountWithFee =
             freeBalance - this.cryptoCurrency.market.taker * freeBalance;
-          const price = amountWithFee * ohlcv[4];
+          const price = amountWithFee * lastPrice;
           const minNational = this.cryptoCurrency.market.limits.cost?.min || 10;
           if (
             price > minNational
