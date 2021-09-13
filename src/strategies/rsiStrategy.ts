@@ -32,42 +32,48 @@ export class RsiStrategy implements CryptoStrategy {
 
       const currentOHLCV = ohlcv.pop();
       const closesValues = ohlcv.map((ohlcv) => ohlcv[4]);
-      var inputRSI = {
-        values: closesValues,
-        period: this.param.period,
-      };
-      var inputEMA = {
-        values: closesValues,
-        period: 200,
-      };
 
-      const rsi = RSI.calculate(inputRSI);
-      const ema = EMA.calculate(inputEMA);
-      await this.checkBuySellSignals(rsi, ema ,ohlcv, currentOHLCV[4]);
+      
+      await this.checkBuySellSignals(closesValues,ohlcv, currentOHLCV[4]);
     } catch (error) {
       console.log(error);
     }
   }
   private async checkBuySellSignals(
-    rsi: number[],
-    ema: number[],
+    closesValues: number[],
     ohlcv,
     lastPrice: number,
   ) {
+    var inputRSI = {
+        values: closesValues,
+        period: this.param.period,
+      };
+      var inputEMA200 = {
+        values: closesValues,
+        period: 200,
+      };
+      var inputEMA50 = {
+        values: closesValues,
+        period: 50,
+      };
+    const rsi = RSI.calculate(inputRSI);
+    const ema200 = EMA.calculate(inputEMA200);
+    const ema50 = EMA.calculate(inputEMA50);
     const currentRowIndex = rsi.length - 1;
     const previousRowIndex = currentRowIndex - 1;
 
     const currentRSI = rsi[currentRowIndex];
     const previousRSI = rsi[previousRowIndex];
 
-    const isClosedAboveEMA = ohlcv[ohlcv.length - 1][4] > ema[ema.length - 1];
+    const isClosedAboveEMA50 = ohlcv[ohlcv.length - 1][4] > ema50[ema50.length - 1];
 
 
 
     if (
       currentRSI > 50 &&
       previousRSI <= 50 &&
-      isClosedAboveEMA
+      ema50 > ema200 &&
+      isClosedAboveEMA50
       
     ) {
         try {

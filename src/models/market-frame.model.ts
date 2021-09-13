@@ -1,7 +1,7 @@
 import { Market } from "ccxt";
 
 export interface IFrameOptions {
-  inPosition: boolean;
+  inPosition?: boolean;
   timeFrame?: string;
   limit?: number;
   since?: number;

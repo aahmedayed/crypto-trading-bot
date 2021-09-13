@@ -3,7 +3,7 @@ import { CryptoStrategy } from "../interfaces/cryptoStrategy.interface";
 const configBot = {
   allocation: 0.1,
   spread: 0.1,
-  tickInterval: 10000,
+  tickInterval: 2000,
 };
 export class Bot<T extends CryptoStrategy> {
   private favoritesCryptoStrategy: T[];
