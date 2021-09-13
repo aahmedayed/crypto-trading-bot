@@ -57,7 +57,7 @@ binanceClient
     const bot = new Bot([
       solRsitrategy1H,
       adaRsitrategy1H,
-      adaRsitrategy1M,
+    //   adaRsitrategy1M,
       //   adaSuperTrendStrategy1H,
       //   solSuperTrendStrategy1H,
       //   xrpSuperTrendStrategy1H,
