@@ -25,42 +25,9 @@ binanceClient
     const adausdt: MarketFrame = new MarketFrame(
       binanceClient.market("ADA/USDT")
     );
-    const adausdt1min: MarketFrame = new MarketFrame(
-      binanceClient.market("ADA/USDT"),
-      { timeFrame: "1m" }
-    );
-    const xrpusdt: MarketFrame = new MarketFrame(
-      binanceClient.market("XRP/USDT")
-    );
-    const solusdt: MarketFrame = new MarketFrame(
-      binanceClient.market("SOL/USDT")
-    );
-
-    // const adaSuperTrendStrategy1H = new SuperTrendStrategy(
-    //   binanceClient,
-    //   adausdt
-    // );
-    // const solSuperTrendStrategy1H = new SuperTrendStrategy(
-    //   binanceClient,
-    //   solusdt
-    // );
-    // const xrpSuperTrendStrategy1H = new SuperTrendStrategy(
-    //   binanceClient,
-    //   xrpusdt,
-    //   { period: 7, multiplier: 3 }
-    // );
-
-    const solRsitrategy1H = new RsiStrategy(binanceClient, solusdt);
-    const adaRsitrategy1M = new RsiStrategy(binanceClient, adausdt1min);
-
     const adaRsitrategy1H = new RsiStrategy(binanceClient, adausdt);
     const bot = new Bot([
-      solRsitrategy1H,
-      adaRsitrategy1H,
-    //   adaRsitrategy1M,
-      //   adaSuperTrendStrategy1H,
-      //   solSuperTrendStrategy1H,
-      //   xrpSuperTrendStrategy1H,
+      adaRsitrategy1H
     ]);
     bot.run();
   })
