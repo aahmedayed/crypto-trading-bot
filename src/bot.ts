@@ -25,10 +25,12 @@ binanceClient
     const adausdt: MarketFrame = new MarketFrame(
       binanceClient.market("ADA/USDT")
     );
+    const solusdt: MarketFrame = new MarketFrame(
+      binanceClient.market("SOL/USDT")
+    );
     const adaRsitrategy1H = new RsiStrategy(binanceClient, adausdt);
-    const bot = new Bot([
-      adaRsitrategy1H
-    ]);
+    const solRsitrategy1H = new RsiStrategy(binanceClient, solusdt);
+    const bot = new Bot([adaRsitrategy1H, solRsitrategy1H]);
     bot.run();
   })
   .catch((err) => {
