@@ -3,7 +3,7 @@ import { binance } from "ccxt";
 import { SuperTrendStrategy } from "./strategies/superTrend";
 import { Bot } from "./models/bot.model";
 import { MarketFrame } from "./models/market-frame.model";
-import { RsiStrategy } from "./strategies/rsiStrategy";
+// import { RsiStrategy } from "./strategies/rsiStrategy";
 dotenv.config();
 
 const binanceClient = new binance({
@@ -28,8 +28,10 @@ binanceClient
     const solusdt: MarketFrame = new MarketFrame(
       binanceClient.market("SOL/USDT")
     );
-    const adaRsitrategy1H = new RsiStrategy(binanceClient, adausdt);
-    const solRsitrategy1H = new RsiStrategy(binanceClient, solusdt);
+    // const adaRsitrategy1H = new RsiStrategy(binanceClient, adausdt);
+    // const solRsitrategy1H = new RsiStrategy(binanceClient, solusdt);
+    const adaRsitrategy1H = new SuperTrendStrategy(binanceClient, adausdt);
+    const solRsitrategy1H = new SuperTrendStrategy(binanceClient, solusdt);
     const bot = new Bot([adaRsitrategy1H, solRsitrategy1H]);
     bot.run();
   })
